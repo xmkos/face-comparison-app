@@ -18,17 +18,16 @@ Na koniec tego projektu oczekuję osiągnięcia:
 
 ## Jak zainstalować i korzystać z narzędzia
 1. Zainstaluj Python 3.12
+
 2.A Wykonaj poniższe polecenia w terminalu:
 ```
 pip install requirements.txt
 python ui.py
-
 ```
 2.B Lub korzystając z environment, otwórz terminal i wpisz poniższe polecenia:
 ```
 ".\env\Scripts\activate"
 python ui.py
-
 ```
 
 3. Zaimportuj obrazy, które chcesz porównać, klikając przycisk "Select Image1" oraz "Select Image2"

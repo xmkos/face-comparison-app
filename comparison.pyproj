@@ -44,7 +44,7 @@
     <Folder Include="resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Read.me" />
+    <Content Include="README.md" />
     <Content Include="requirements.txt" />
     <Content Include="resources\app.png" />
   </ItemGroup>
