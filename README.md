@@ -20,18 +20,20 @@ Na koniec tego projektu oczekuję osiągnięcia:
 
 1. Zainstaluj Python 3.9.0 z [Python Official Website](https://www.python.org/downloads/release/python-390/)
 
-2.A Wykonaj poniższe polecenia w terminalu:
+2. Wykonaj poniższe polecenia w terminalu(inny sposób w punkcie 3):
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 python ui.py
 ```
-2.B Lub korzystając z environment, otwórz terminal i wpisz poniższe polecenia:
+3. Lub korzystając z environment, otwórz terminal i wpisz poniższe polecenia:
 ```
-".\env\Scripts\activate"
+.\env\Scripts\activate
 python ui.py
 ```
+4. Zaimportuj obrazy, które chcesz porównać, klikając przycisk "Select Image 1" oraz "Select Image 2".
 
-3. Zaimportuj obrazy, które chcesz porównać, klikając przycisk "Select Image1" oraz "Select Image2"
-4. Kliknij przycisk "Compare Faces"
-5. Czekaj na wyniki oglądając progress bar
-6. Przeglądaj wyniki
+5. Kliknij przycisk "Compare Faces".
+
+6. Czekaj na wyniki oglądając progress bar.
+
+7. Przeglądaj wyniki.
