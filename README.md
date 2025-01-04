@@ -17,7 +17,8 @@ Na koniec tego projektu oczekuję osiągnięcia:
 - Intuicyjnego i przyjaznego interfejsu użytkownika
 
 ## Jak zainstalować i korzystać z narzędzia
-1. Zainstaluj Python 3.12
+
+1. Zainstaluj Python 3.9.0 z [Python Official Website](https://www.python.org/downloads/release/python-390/)
 
 2.A Wykonaj poniższe polecenia w terminalu:
 ```

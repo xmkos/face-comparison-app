@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QFileDialog, QMessageBox, QProgressBar
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot, Qt  # Import Qt
 from comparison import FaceComparison
 
 class FaceComparisonThread(QThread):
@@ -16,9 +16,8 @@ class FaceComparisonThread(QThread):
         self.image_path2 = image_path2
         self.threshold = threshold
 
-
     def run(self):
-        # Perform face comparison in a separate thread to avoid problems with the UI ( without it I've had problems with the UI freezing)
+        # Perform face comparison in a separate thread to avoid problems with the UI (without it, the UI may freeze)
         try:
             face_comparison = FaceComparison(self.image_path1, self.image_path2, self.threshold)
             face_comparison.progress_updated.connect(self.progress_updated.emit)
@@ -50,6 +49,7 @@ class FaceComparisonUI(QWidget):
         self.image_label2 = QLabel()
         self.process_label = QLabel('Process: ')
         self.progress_bar = QProgressBar()
+        self.result_label = QLabel('')  # New label for displaying the result
 
         self.btn_select_image1 = QPushButton('Select Image 1')
         self.btn_select_image2 = QPushButton('Select Image 2')
@@ -70,8 +70,46 @@ class FaceComparisonUI(QWidget):
         layout.addWidget(self.btn_compare)
         layout.addWidget(self.process_label)
         layout.addWidget(self.progress_bar)
+        layout.addWidget(self.result_label)  # Add the result label to the layout
 
         self.setLayout(layout)
+
+        # Set dark mode stylesheet
+        dark_mode_stylesheet = """
+        QWidget {
+            background-color: #2e2e2e;
+            color: #ffffff;
+        }
+        QPushButton {
+            background-color: #4a4a4a;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        QPushButton:hover {
+            background-color: #5a5a5a;
+        }
+        QPushButton:pressed {
+            background-color: #3a3a3a;
+        }
+        QProgressBar {
+            background-color: #4a4a4a;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            text-align: center;
+        }
+        QProgressBar::chunk {
+            background-color: #3a3a3a;
+        }
+        QLabel#result_label {
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+        """
+        self.setStyleSheet(dark_mode_stylesheet)
 
     def select_image1(self):
         # Open file dialog to select the first image
@@ -101,6 +139,7 @@ class FaceComparisonUI(QWidget):
 
         self.process_label.setText('Process: Comparing faces...')
         self.progress_bar.setValue(0)
+        self.result_label.setText('')  # Clear the result label
 
         # Create and start the comparison thread
         self.comparison_thread = FaceComparisonThread(self.image_path1, self.image_path2, threshold=0.6)
@@ -112,11 +151,16 @@ class FaceComparisonUI(QWidget):
         # Update the progress bar value
         self.progress_bar.setValue(value)
 
-    @pyqtSlot(object,str)  # decorator which validates the type of the arguments for the function
+    @pyqtSlot(object, str)  # decorator which validates the type of the arguments for the function
     def show_result(self, similarity_score, result):
-        # Show the result in a message box
+        # Show the result in a message box and update the result label
         if similarity_score is not None:
-            QMessageBox.information(self, "Result", f'{result} (Similarity: {similarity_score * 100:.2f}%)')
+            if similarity_score >= 0.6:
+                result_text = f'<span style="color: green;">Similar</span> (Similarity: {similarity_score * 100:.2f}%)'
+            else:
+                result_text = f'<span style="color: red;">Different</span> (Similarity: {similarity_score * 100:.2f}%)'
+            self.result_label.setText(result_text)
+            self.result_label.setAlignment(Qt.AlignCenter)  # Center the text
             self.process_label.setText('Process: Complete')
         else:
             QMessageBox.warning(self, "Result", f'Error in face comparison: {result}')
