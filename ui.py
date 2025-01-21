@@ -155,17 +155,17 @@ class FaceComparisonUI(QWidget):
     def show_result(self, similarity_score, result):
         # Show the result in a message box and update the result label
         if similarity_score is not None:
-            if similarity_score >= 0.6:
+            if similarity_score >= 0.62:
                 result_text = f'<span style="color: green;">Similar</span> (Similarity: {similarity_score * 100:.2f}%)'
             else:
                 result_text = f'<span style="color: red;">Different</span> (Similarity: {similarity_score * 100:.2f}%)'
             self.result_label.setText(result_text)
-            self.result_label.setAlignment(Qt.AlignCenter)  # Center the text
+            self.result_label.setAlignment(Qt.AlignCenter)
             self.process_label.setText('Process: Complete')
         else:
             QMessageBox.warning(self, "Result", f'Error in face comparison: {result}')
             self.process_label.setText('Process: Error in running')
-
+             
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = FaceComparisonUI()
