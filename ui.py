@@ -153,7 +153,6 @@ class FaceComparisonUI(QWidget):
 
     @pyqtSlot(object, str)  # decorator which validates the type of the arguments for the function
     def show_result(self, similarity_score, result):
-        # Show the result in a message box and update the result label
         if similarity_score is not None:
             if similarity_score >= 0.62:
                 result_text = f'<span style="color: green;">Similar</span> (Similarity: {similarity_score * 100:.2f}%)'
@@ -163,9 +162,11 @@ class FaceComparisonUI(QWidget):
             self.result_label.setAlignment(Qt.AlignCenter)
             self.process_label.setText('Process: Complete')
         else:
-            QMessageBox.warning(self, "Result", f'Error in face comparison: {result}')
+            error_text = f'<span style="color: red;">Error in face comparison:</span><br>{result}'
+            self.result_label.setText(error_text)
+            self.result_label.setAlignment(Qt.AlignCenter)
             self.process_label.setText('Process: Error in running')
-             
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = FaceComparisonUI()

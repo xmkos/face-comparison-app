@@ -19,6 +19,7 @@ class FaceComparison(QObject):
         self.features1 = None
         self.features2 = None
         self.threshold = threshold
+        self.unique_encodings = set()  # Set to store unique face encodings
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     def resize_image(self, image, max_width=640, max_height=480):
@@ -46,7 +47,6 @@ class FaceComparison(QObject):
             logging.error(f"Error loading image {image_path}: {e}")
             raise
 
-
     def detect_face(self, image):
         # Detect first face in the image and return its coordinates
         face_locations = face_recognition.face_locations(image)
@@ -64,8 +64,12 @@ class FaceComparison(QObject):
         if not face_encodings:
             raise ValueError("No face encodings found")
         else:
-            logging.info(f"Extracted features: {face_encodings[0]}")
-            return face_encodings[0]
+            encoding = face_encodings[0]
+            if tuple(encoding) in self.unique_encodings:
+                raise ValueError("Duplicate face encoding found")
+            self.unique_encodings.add(tuple(encoding))
+            logging.info(f"Extracted features: {encoding}")
+            return encoding
 
     def calculate_similarity(self, feature_vector1, feature_vector2):
         # Calculate similarity score between two feature vectors according to Euclidean distance formula
